@@ -1,5 +1,19 @@
 #!/usr/bin/env python
 
+######################################################################
+# PURPOSE:
+#
+# Script to scrape data off of page
+# https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main
+#
+# Retrieves all of the data in the iframe by by selecting every 
+# option in the second dropdown menu 
+#
+# Results written to *.html files in same directory as script
+#
+# USAGE: 
+#   $ ./ntu-edu.py
+######################################################################
 import sys, logging
 import mechanize, time
 from bs4 import BeautifulSoup, Comment
@@ -25,9 +39,16 @@ def soupify(page):
     return s
 
 def select_form(form):
+    '''
+    Select the course display form
+    '''
     return form.attrs.get('target', None) == 'subjects'
 
 def submit_form(item):
+    '''
+    Submit form using selection item.name and write the results
+    to file named according to item.label
+    '''
     maxtries = 3
     numtries = 0
 
@@ -71,6 +92,7 @@ if __name__ == '__main__':
     items = br.form.find_control('r_course_yr').get_items()
 
     for item in items:
+        # Skip invalid/blank item selections
         if len(item.name) < 1:
             continue
 
