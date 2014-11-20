@@ -35,7 +35,6 @@ def soupify(page):
     for c in comments:
         c.extract()
 
-    # Remove entity references?
     return s
 
 def select_form(form):
