@@ -6,8 +6,8 @@
 # Script to scrape data off of page
 # https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main
 #
-# Retrieves all of the data in the iframe by by selecting every 
-# option in the second dropdown menu 
+# Retrieves all of the data in the iframe by selecting every option 
+# in the second dropdown menu 
 #
 # Results written to *.html files in same directory as script
 #
