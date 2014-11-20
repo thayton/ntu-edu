@@ -51,6 +51,8 @@ def submit_form(item):
     maxtries = 3
     numtries = 0
 
+    sys.stderr.write('Submitting form for item %s\n' % item.name)
+
     br = mechanize.Browser()
 
     while numtries < maxtries:
@@ -79,6 +81,8 @@ def submit_form(item):
     label = ' '.join([label.text for label in item.get_labels()])
     label = '-'.join(label.split())
 
+    sys.stderr.write('Writing results for item %s to file %s.html\n' % (item.name, label))
+
     with open("%s.html" % label, 'w') as f:
         f.write(s.prettify())
         f.close()
@@ -87,6 +91,8 @@ if __name__ == '__main__':
     br = mechanize.Browser()
     br.open(URL)
     br.select_form(predicate=select_form)
+
+    sys.stderr.write('Generating list of items for form selection\n')
 
     items = br.form.find_control('r_course_yr').get_items()
 
