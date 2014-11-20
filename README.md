@@ -1,7 +1,7 @@
 ntu-edu
 =======
 
-Scraper for ntu.edu
+Scraper for page https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main
 
 Usage
 =====
