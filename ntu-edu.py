@@ -76,7 +76,7 @@ def submit_form(item):
     if numtries == maxtries:
         raise
 
-    s = BeautifulSoup(br.response().read())
+    data = br.response().read()
 
     label = ' '.join([label.text for label in item.get_labels()])
     label = '-'.join(label.split())
@@ -84,7 +84,7 @@ def submit_form(item):
     sys.stderr.write('Writing results for item %s to file %s.html\n' % (item.name, label))
 
     with open("%s.html" % label, 'w') as f:
-        f.write(s.prettify())
+        f.write(data)
         f.close()
     
 if __name__ == '__main__':
