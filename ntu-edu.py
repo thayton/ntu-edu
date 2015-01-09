@@ -14,9 +14,8 @@
 # USAGE: 
 #   $ ./ntu-edu.py
 ######################################################################
-import sys, signal, logging
+import sys, signal
 import mechanize, time
-from bs4 import BeautifulSoup, Comment
 
 URL = 'https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main'
 DELAY = 5
@@ -32,37 +31,14 @@ def select_form(form):
     return form.attrs.get('target', None) == 'subjects'
 
 class NtuEduScraper:
-    def __init__(self):
+    def __init__(self, url=URL, delay=DELAY):
         self.br = mechanize.Browser()
-        self.url = 'https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main'
-        self.delay = 5
-        self.items = []
-
-    def soupify(self, page):
-        '''
-        Run HTML page through BeautifulSoup and return the results, 
-        minus script/style tags and comments
-        '''
-        s = BeautifulSoup(page)
-
-        # Remove unwanted tags
-        tags = s.findAll(lambda tag: tag.name == 'script' or \
-                                     tag.name == 'style')
-
-        for t in tags:
-            t.extract()
-        
-        # Remove comments
-        comments = s.findAll(text=lambda text:isinstance(text, Comment))
-        for c in comments:
-            c.extract()
-
-        return s
+        self.url = url
+        self.delay = delay
 
     def submit_form(self, item):
         '''
-        Submit form using selection item.name and write the results
-        to file named according to item.label
+        Submit form using selection item.name and return the results
         '''
         maxtries = 3
         numtries = 0
@@ -90,7 +66,7 @@ class NtuEduScraper:
         if numtries == maxtries:
             raise
 
-        self.item_results_to_file(item, self.br.response().read())
+        return self.br.response().read()
 
     def item_results_to_file(self, item, results):
         label = ' '.join([label.text for label in item.get_labels()])
@@ -118,15 +94,20 @@ class NtuEduScraper:
         return items
 
     def scrape(self):
-        self.items = self.get_items()
+        '''
+        Get the list of items in the second dropdown menu and submit the
+        form for each item. Save the results to file.
+        '''
+        items = self.get_items()
 
-        for item in self.items:
+        for item in items:
             # Skip invalid/blank item selections
             if len(item.name) < 1:
                 continue
 
-            self.submit_form(item)
-            time.sleep(3)
+            results = self.submit_form(item)
+            self.item_results_to_file(item, results)
+            time.sleep(self.delay)
         
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, sigint)
