@@ -1,7 +1,4 @@
-ntu-edu
-=======
-
-Scraper for page https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main
+Accompanying code for the article [Scraping by Example - Iterating through Select Items With Mechanize](http://toddhayton.com/2015/01/09/scraping-by-example-ntu-edu/)
 
 Usage
 =====
